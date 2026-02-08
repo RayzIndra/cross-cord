@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Interactive - ✟cord</title>
+    <meta name="description" content="Lisez la Bible avec de magnifiques fonds apaisants. Versets quotidiens, recherche par livre, et atmosphère relaxante.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --overlay-dark: rgba(0, 0, 0, 0.6);
+            --overlay-light: rgba(255, 255, 255, 0.95);
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --accent-gold: #d4af37;
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            overflow-x: hidden;
+            background: #1a1a1a;
+        }
+
+        /* Background slideshow */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .bg-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .bg-slide.active {
+            opacity: 1;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-dark);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Main content */
+        main {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero verse section */
+        .hero-verse {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto 4rem;
+        }
+
+        .verse-of-day {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .verse-text {
+            font-size: 2.2rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .verse-reference {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            font-style: italic;
+        }
+
+        /* Bible reader section */
+        .bible-reader {
+            background: var(--overlay-light);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .reader-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        select, button {
+            padding: 1rem 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        select:focus, button:hover {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        button {
+            background: var(--text-dark);
+            color: white;
+            border-color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .chapter-display {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            line-height: 1.9;
+            color: var(--text-dark);
+        }
+
+        .chapter-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .verse {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .verse-number {
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+            vertical-align: super;
+        }
+
+        /* Daily inspirations grid */
+        .inspiration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .inspiration-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .inspiration-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .inspiration-card h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--text-dark);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .inspiration-card p {
+            color: #555;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .inspiration-ref {
+            color: var(--accent-gold);
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        /* Background selector */
+        .bg-selector {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1.5rem;
+            border-radius: 15px;
+            z-index: 999;
+        }
+
+        .bg-selector h4 {
+            color: var(--text-light);
+            font-family: 'Cinzel', serif;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .bg-options {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .bg-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bg-option:hover,
+        .bg-option.active {
+            border-color: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .verse-text {
+                font-size: 1.5rem;
+            }
+            
+            .bible-reader {
+                padding: 1.5rem;
+            }
+
+            .chapter-display {
+                padding: 1.5rem;
+            }
+
+            .bg-selector {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-dark);
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Search box */
+        .search-box {
+            margin-bottom: 2rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <div class="bg-slide active" style="background-image: url('https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&q=80');"></div>
+        <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80');"></div>
+        <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1920&q=80');"></div>
+        <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80');"></div>
+        <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80');"></div>
+        <div class="bg-overlay"></div>
+    </div>
+
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">✟ BIBLE</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil ✟cord</a></li>
+                <li><a href="https://discord.gg/kVs5NaUG" target="_blank">Discord</a></li>
+                <li><a href="#reader">Lire</a></li>
+                <li><a href="#inspirations">Inspirations</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero-verse">
+            <div class="verse-of-day">Verset du jour</div>
+            <p class="verse-text" id="dailyVerse">
+                "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."
+            </p>
+            <p class="verse-reference" id="dailyReference">Jean 3:16</p>
+        </section>
+
+        <div class="container">
+            <section class="bible-reader" id="reader">
+                <h2 class="chapter-title">📖 Lecteur de Bible</h2>
+                
+                <div class="search-box">
+                    <input type="text" id="verseSearch" placeholder="Rechercher un verset... (ex: Jean 3:16)">
+                </div>
+
+                <div class="reader-controls">
+                    <select id="bookSelect">
+                        <option value="">Choisir un livre...</option>
+                        <optgroup label="Ancien Testament">
+                            <option value="genese">Genèse</option>
+                            <option value="exode">Exode</option>
+                            <option value="psaumes">Psaumes</option>
+                            <option value="proverbes">Proverbes</option>
+                            <option value="esaie">Ésaïe</option>
+                        </optgroup>
+                        <optgroup label="Nouveau Testament">
+                            <option value="matthieu">Matthieu</option>
+                            <option value="marc">Marc</option>
+                            <option value="luc">Luc</option>
+                            <option value="jean">Jean</option>
+                            <option value="actes">Actes</option>
+                            <option value="romains">Romains</option>
+                            <option value="corinthiens1">1 Corinthiens</option>
+                            <option value="galates">Galates</option>
+                            <option value="ephesiens">Éphésiens</option>
+                            <option value="philippiens">Philippiens</option>
+                            <option value="apocalypse">Apocalypse</option>
+                        </optgroup>
+                    </select>
+
+                    <select id="chapterSelect">
+                        <option value="">Chapitre...</option>
+                    </select>
+
+                    <button onclick="loadChapter()">Charger</button>
+                    <button onclick="randomVerse()">Verset aléatoire ✨</button>
+                </div>
+
+                <div class="chapter-display" id="chapterContent">
+                    <p style="text-align: center; color: #999;">Sélectionnez un livre et un chapitre pour commencer votre lecture...</p>
+                </div>
+            </section>
+
+            <section id="inspirations">
+                <h2 class="chapter-title" style="color: white; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">✨ Versets Inspirants</h2>
+                <div class="inspiration-grid" id="inspirationGrid">
+                    <!-- Cards will be generated by JS -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="bg-selector">
+        <h4>AMBIANCE</h4>
+        <div class="bg-options">
+            <div class="bg-option active" onclick="changeBg(0)" style="background-image: url('https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=100&q=80');" title="Plage"></div>
+            <div class="bg-option" onclick="changeBg(1)" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=100&q=80');" title="Montagne"></div>
+            <div class="bg-option" onclick="changeBg(2)" style="background-image: url('https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=100&q=80');" title="Nature"></div>
+            <div class="bg-option" onclick="changeBg(3)" style="background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=100&q=80');" title="Forêt"></div>
+            <div class="bg-option" onclick="changeBg(4)" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=100&q=80');" title="Arbres"></div>
+        </div>
+    </div>
+
+    <script>
+        // Daily verse rotation
+        const dailyVerses = [
+            { text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", ref: "Jean 3:16" },
+            { text: "Je puis tout par celui qui me fortifie.", ref: "Philippiens 4:13" },
+            { text: "L'Éternel est mon berger : je ne manquerai de rien.", ref: "Psaume 23:1" },
+            { text: "Ne crains rien, car je suis avec toi; Ne promène pas des regards inquiets, car je suis ton Dieu.", ref: "Ésaïe 41:10" },
+            { text: "Déchargez-vous sur lui de tous vos soucis, car lui-même prend soin de vous.", ref: "1 Pierre 5:7" },
+            { text: "Que votre cœur ne se trouble point. Croyez en Dieu, et croyez en moi.", ref: "Jean 14:1" },
+            { text: "Tout ce que vous demanderez avec foi par la prière, vous le recevrez.", ref: "Matthieu 21:22" },
+            { text: "Car mes pensées ne sont pas vos pensées, Et vos voies ne sont pas mes voies, Dit l'Éternel.", ref: "Ésaïe 55:8" }
+        ];
+
+        // Set random daily verse
+        const today = new Date().getDate();
+        const todayVerse = dailyVerses[today % dailyVerses.length];
+        document.getElementById('dailyVerse').textContent = todayVerse.text;
+        document.getElementById('dailyReference').textContent = todayVerse.ref;
+
+        // Inspiration cards data
+        const inspirations = [
+            { title: "Espoir", text: "Que le Dieu de l'espérance vous remplisse de toute joie et de toute paix dans la foi.", ref: "Romains 15:13" },
+            { title: "Force", text: "Quand je suis faible, c'est alors que je suis fort.", ref: "2 Corinthiens 12:10" },
+            { title: "Amour", text: "L'amour est patient, il est plein de bonté; l'amour n'est point envieux.", ref: "1 Corinthiens 13:4" },
+            { title: "Paix", text: "Je vous laisse la paix, je vous donne ma paix.", ref: "Jean 14:27" },
+            { title: "Foi", text: "La foi est une ferme assurance des choses qu'on espère.", ref: "Hébreux 11:1" },
+            { title: "Sagesse", text: "Si quelqu'un d'entre vous manque de sagesse, qu'il la demande à Dieu.", ref: "Jacques 1:5" }
+        ];
+
+        // Generate inspiration cards
+        const grid = document.getElementById('inspirationGrid');
+        inspirations.forEach(insp => {
+            const card = document.createElement('div');
+            card.className = 'inspiration-card';
+            card.innerHTML = `
+                <h3>${insp.title}</h3>
+                <p>"${insp.text}"</p>
+                <p class="inspiration-ref">— ${insp.ref}</p>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Background slideshow
+        let currentBg = 0;
+        const slides = document.querySelectorAll('.bg-slide');
+        
+        function changeBg(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.bg-option').forEach((opt, i) => {
+                opt.classList.toggle('active', i === index);
+            });
+            currentBg = index;
+        }
+
+        // Auto slideshow (optional)
+        // setInterval(() => {
+        //     currentBg = (currentBg + 1) % slides.length;
+        //     changeBg(currentBg);
+        // }, 10000);
+
+        // Bible books with chapters
+        const bibleBooks = {
+            genese: 50, exode: 40, psaumes: 150, proverbes: 31, esaie: 66,
+            matthieu: 28, marc: 16, luc: 24, jean: 21, actes: 28,
+            romains: 16, corinthiens1: 16, galates: 6, ephesiens: 6,
+            philippiens: 4, apocalypse: 22
+        };
+
+        // Sample Bible content (simplified)
+        const bibleContent = {
+            'jean-3': [
+                { num: 1, text: "Il y eut un homme d'entre les pharisiens, nommé Nicodème, un chef des Juifs." },
+                { num: 2, text: "Qui vint, lui, auprès de Jésus, de nuit, et lui dit: Rabbi, nous savons que tu es un docteur venu de Dieu; car personne ne peut faire ces miracles que tu fais, si Dieu n'est avec lui." },
+                { num: 16, text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle." },
+                { num: 17, text: "Dieu, en effet, n'a pas envoyé son Fils dans le monde pour qu'il juge le monde, mais pour que le monde soit sauvé par lui." }
+            ],
+            'psaumes-23': [
+                { num: 1, text: "L'Éternel est mon berger: je ne manquerai de rien." },
+                { num: 2, text: "Il me fait reposer dans de verts pâturages, Il me dirige près des eaux paisibles." },
+                { num: 3, text: "Il restaure mon âme, Il me conduit dans les sentiers de la justice, À cause de son nom." },
+                { num: 4, text: "Quand je marche dans la vallée de l'ombre de la mort, Je ne crains aucun mal, car tu es avec moi: Ta houlette et ton bâton me rassurent." }
+            ],
+            'philippiens-4': [
+                { num: 4, text: "Réjouissez-vous toujours dans le Seigneur; je le répète, réjouissez-vous." },
+                { num: 6, text: "Ne vous inquiétez de rien; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces." },
+                { num: 7, text: "Et la paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs et vos pensées en Jésus Christ." },
+                { num: 13, text: "Je puis tout par celui qui me fortifie." }
+            ]
+        };
+
+        // Update chapters when book is selected
+        document.getElementById('bookSelect').addEventListener('change', function() {
+            const book = this.value;
+            const chapterSelect = document.getElementById('chapterSelect');
+            chapterSelect.innerHTML = '<option value="">Chapitre...</option>';
+            
+            if (book && bibleBooks[book]) {
+                for (let i = 1; i <= bibleBooks[book]; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `Chapitre ${i}`;
+                    chapterSelect.appendChild(option);
+                }
+            }
+        });
+
+        // Load chapter
+        function loadChapter() {
+            const book = document.getElementById('bookSelect').value;
+            const chapter = document.getElementById('chapterSelect').value;
+            const content = document.getElementById('chapterContent');
+
+            if (!book || !chapter) {
+                alert('Veuillez sélectionner un livre et un chapitre');
+                return;
+            }
+
+            const key = `${book}-${chapter}`;
+            const bookName = document.getElementById('bookSelect').selectedOptions[0].text;
+
+            if (bibleContent[key]) {
+                let html = `<h3 class="chapter-title">${bookName} - Chapitre ${chapter}</h3>`;
+                bibleContent[key].forEach(verse => {
+                    html += `<p class="verse"><span class="verse-number">${verse.num}</span>${verse.text}</p>`;
+                });
+                content.innerHTML = html;
+            } else {
+                content.innerHTML = `
+                    <h3 class="chapter-title">${bookName} - Chapitre ${chapter}</h3>
+                    <p style="text-align: center; color: #999; padding: 2rem;">
+                        📖 Contenu en cours de chargement...<br><br>
+                        <em>Cette démo contient quelques chapitres. Pour une Bible complète, 
+                        vous pouvez utiliser l'API Bible ou importer le texte complet.</em>
+                    </p>
+                `;
+            }
+        }
+
+        // Random verse
+        function randomVerse() {
+            const randomDaily = dailyVerses[Math.floor(Math.random() * dailyVerses.length)];
+            document.getElementById('chapterContent').innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <p style="font-size: 1.8rem; line-height: 1.8; margin-bottom: 2rem;">"${randomDaily.text}"</p>
+                    <p style="font-family: 'Cinzel', serif; color: var(--accent-gold); font-size: 1.2rem;">— ${randomDaily.ref}</p>
+                </div>
+            `;
+        }
+
+        // Search functionality
+        document.getElementById('verseSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.toLowerCase();
+                // Simple search - in real app would search full Bible
+                const found = dailyVerses.find(v => 
+                    v.ref.toLowerCase().includes(query) || 
+                    v.text.toLowerCase().includes(query)
+                );
+                
+                if (found) {
+                    document.getElementById('chapterContent').innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <p style="font-size: 1.8rem; line-height: 1.8; margin-bottom: 2rem;">"${found.text}"</p>
+                            <p style="font-family: 'Cinzel', serif; color: var(--accent-gold); font-size: 1.2rem;">— ${found.ref}</p>
+                        </div>
+                    `;
+                } else {
+                    alert('Verset non trouvé dans cette démo. Essayez "Jean 3:16" ou "Philippiens 4:13"');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outils Spirituels - ✟cord</title>
+    <meta name="description" content="Outils quotidiens pour votre vie spirituelle : minuteur de prière, mémorisation de versets, journal spirituel, et plus encore.">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text: #ffffff;
+            --text-muted: #999;
+            --accent: #d4af37;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.1);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .tool-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Prayer Timer */
+        .timer-display {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--accent);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        button.secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        /* Verse Memorization */
+        .verse-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .verse-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            min-height: 100px;
+        }
+
+        .verse-hidden {
+            filter: blur(8px);
+            user-select: none;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        /* Journal */
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            background: #2a2a2a;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.1rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .journal-entry {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .journal-date {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Devotional */
+        .devotional-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .devotional-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .devotional-text {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1.5rem;
+            background: #2a2a2a;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            .timer-display {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">✟cord</a>
+            <div>
+                <a href="index.html">Accueil</a>
+                <a href="bible.html">Bible</a>
+                <a href="tools.html">Outils</a>
+                <a href="https://discord.gg/kVs5NaUG" target="_blank">Discord</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>🛠️ Outils Spirituels Quotidiens</h1>
+        <p class="subtitle">Ressources pratiques pour enrichir votre vie de foi</p>
+
+        <div class="tools-grid">
+            <!-- Prayer Timer -->
+            <div class="tool-card">
+                <div class="tool-icon">⏰</div>
+                <h3>Minuteur de Prière</h3>
+                <p>Définissez un temps dédié à la prière et restez concentré</p>
+                
+                <div class="timer-display" id="timerDisplay">05:00</div>
+                
+                <div class="timer-controls">
+                    <button onclick="setTimer(5)">5 min</button>
+                    <button onclick="setTimer(10)">10 min</button>
+                    <button onclick="setTimer(15)">15 min</button>
+                    <button onclick="setTimer(30)">30 min</button>
+                </div>
+                
+                <div class="timer-controls" style="margin-top: 1rem;">
+                    <button onclick="startTimer()" id="startBtn">▶ Démarrer</button>
+                    <button onclick="pauseTimer()" class="secondary" id="pauseBtn">⏸ Pause</button>
+                    <button onclick="resetTimer()" class="secondary">↻ Reset</button>
+                </div>
+
+                <div class="stats-grid" style="margin-top: 2rem;">
+                    <div class="stat-box">
+                        <div class="stat-number" id="prayerCount">0</div>
+                        <div class="stat-label">Sessions</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalMinutes">0</div>
+                        <div class="stat-label">Minutes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verse Memorization -->
+            <div class="tool-card">
+                <div class="tool-icon">🧠</div>
+                <h3>Mémorisation de Versets</h3>
+                <p>Apprenez et retenez les Écritures par cœur</p>
+                
+                <div class="verse-card">
+                    <div class="verse-text" id="memoryVerse">
+                        Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.
+                    </div>
+                    <p style="color: var(--accent); font-style: italic;" id="memoryRef">Jean 3:16</p>
+                </div>
+
+                <button onclick="toggleVerse()" id="revealBtn">👁️ Révéler / Cacher</button>
+                <button onclick="nextVerse()" class="secondary">➡️ Verset suivant</button>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="memoryProgress" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); margin-top: 0.5rem;">
+                    <span id="versesLearned">0</span>/10 versets mémorisés
+                </p>
+            </div>
+
+            <!-- Daily Devotional -->
+            <div class="tool-card">
+                <div class="tool-icon">📚</div>
+                <h3>Méditation Quotidienne</h3>
+                <p>Réflexion spirituelle du jour</p>
+                
+                <div class="devotional-content">
+                    <h4 class="devotional-title" id="devotionalTitle">La Force dans la Faiblesse</h4>
+                    <p class="devotional-text" id="devotionalText">
+                        Parfois, nos plus grandes victoires spirituelles viennent de nos moments de faiblesse. 
+                        Lorsque nous reconnaissons que nous ne pouvons pas tout faire par nos propres forces, 
+                        nous nous ouvrons à la puissance de Dieu. C'est dans notre vulnérabilité que Sa force 
+                        se manifeste le plus clairement. Aujourd'hui, n'ayez pas peur d'admettre vos limites 
+                        et de vous appuyer sur Sa grâce infinie.
+                    </p>
+                    <p style="color: var(--accent); font-style: italic; text-align: center;">
+                        "Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse." - 2 Corinthiens 12:9
+                    </p>
+                </div>
+
+                <button onclick="newDevotional()" style="margin-top: 1.5rem; width: 100%;">
+                    🔄 Nouvelle méditation
+                </button>
+            </div>
+
+            <!-- Prayer Requests -->
+            <div class="tool-card">
+                <div class="tool-icon">🙏</div>
+                <h3>Liste de Prière</h3>
+                <p>Suivez vos demandes de prière et les réponses reçues</p>
+                
+                <textarea id="prayerInput" placeholder="Écrivez votre demande de prière..."></textarea>
+                <button onclick="addPrayer()" style="width: 100%;">➕ Ajouter à ma liste</button>
+
+                <div id="prayerList" style="margin-top: 1.5rem;">
+                    <!-- Prayer items will be added here -->
+                </div>
+
+                <div class="stats-grid" style="margin-top: 2rem;">
+                    <div class="stat-box">
+                        <div class="stat-number" id="activePrayers">0</div>
+                        <div class="stat-label">Actives</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="answeredPrayers">0</div>
+                        <div class="stat-label">Exaucées</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spiritual Journal -->
+            <div class="tool-card" style="grid-column: span 2;">
+                <div class="tool-icon">📝</div>
+                <h3>Journal Spirituel</h3>
+                <p>Documentez votre parcours de foi et vos réflexions</p>
+                
+                <textarea id="journalInput" placeholder="Comment Dieu a-t-il agi dans votre vie aujourd'hui ?&#10;Qu'avez-vous appris ? Pour quoi êtes-vous reconnaissant ?"></textarea>
+                <button onclick="saveJournalEntry()" style="width: 100%;">💾 Sauvegarder</button>
+
+                <h4 style="margin: 2rem 0 1rem; font-family: 'Syne', sans-serif;">Entrées récentes</h4>
+                <div id="journalEntries">
+                    <!-- Journal entries will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Timer functionality
+        let timerSeconds = 300; // 5 minutes default
+        let timerInterval = null;
+        let isRunning = false;
+        let totalPrayerTime = parseInt(localStorage.getItem('totalPrayerTime') || '0');
+        let prayerSessions = parseInt(localStorage.getItem('prayerSessions') || '0');
+
+        document.getElementById('totalMinutes').textContent = totalPrayerTime;
+        document.getElementById('prayerCount').textContent = prayerSessions;
+
+        function setTimer(minutes) {
+            timerSeconds = minutes * 60;
+            updateTimerDisplay();
+            if (isRunning) pauseTimer();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            document.getElementById('startBtn').textContent = '▶ En cours...';
+            
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                } else {
+                    pauseTimer();
+                    alert('⏰ Temps de prière terminé ! Que Dieu vous bénisse.');
+                    prayerSessions++;
+                    const minutes = parseInt(document.getElementById('timerDisplay').textContent.split(':')[0]);
+                    totalPrayerTime += minutes;
+                    localStorage.setItem('prayerSessions', prayerSessions);
+                    localStorage.setItem('totalPrayerTime', totalPrayerTime);
+                    document.getElementById('prayerCount').textContent = prayerSessions;
+                    document.getElementById('totalMinutes').textContent = totalPrayerTime;
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('startBtn').textContent = '▶ Démarrer';
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            setTimer(5);
+        }
+
+        // Verse memorization
+        const memoryVerses = [
+            { text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", ref: "Jean 3:16" },
+            { text: "Je puis tout par celui qui me fortifie.", ref: "Philippiens 4:13" },
+            { text: "L'Éternel est mon berger : je ne manquerai de rien.", ref: "Psaume 23:1" },
+            { text: "Cherchez premièrement le royaume et la justice de Dieu; et toutes ces choses vous seront données par-dessus.", ref: "Matthieu 6:33" },
+            { text: "Car mes pensées ne sont pas vos pensées, Et vos voies ne sont pas mes voies, Dit l'Éternel.", ref: "Ésaïe 55:8" },
+            { text: "Que votre cœur ne se trouble point. Croyez en Dieu, et croyez en moi.", ref: "Jean 14:1" },
+            { text: "Déchargez-vous sur lui de tous vos soucis, car lui-même prend soin de vous.", ref: "1 Pierre 5:7" },
+            { text: "Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d'eux.", ref: "Matthieu 18:20" },
+            { text: "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence.", ref: "Romains 12:2" },
+            { text: "L'amour est patient, il est plein de bonté; l'amour n'est point envieux.", ref: "1 Corinthiens 13:4" }
+        ];
+
+        let currentVerseIndex = 0;
+        let isVerseHidden = false;
+        let versesMemorized = parseInt(localStorage.getItem('versesMemorized') || '0');
+
+        document.getElementById('versesLearned').textContent = versesMemorized;
+        document.getElementById('memoryProgress').style.width = (versesMemorized / 10 * 100) + '%';
+
+        function toggleVerse() {
+            const verseEl = document.getElementById('memoryVerse');
+            isVerseHidden = !isVerseHidden;
+            verseEl.classList.toggle('verse-hidden', isVerseHidden);
+            
+            if (!isVerseHidden && versesMemorized < 10) {
+                versesMemorized++;
+                localStorage.setItem('versesMemorized', versesMemorized);
+                document.getElementById('versesLearned').textContent = versesMemorized;
+                document.getElementById('memoryProgress').style.width = (versesMemorized / 10 * 100) + '%';
+            }
+        }
+
+        function nextVerse() {
+            currentVerseIndex = (currentVerseIndex + 1) % memoryVerses.length;
+            const verse = memoryVerses[currentVerseIndex];
+            document.getElementById('memoryVerse').textContent = verse.text;
+            document.getElementById('memoryRef').textContent = verse.ref;
+            isVerseHidden = false;
+            document.getElementById('memoryVerse').classList.remove('verse-hidden');
+        }
+
+        // Devotionals
+        const devotionals = [
+            {
+                title: "La Force dans la Faiblesse",
+                text: "Parfois, nos plus grandes victoires spirituelles viennent de nos moments de faiblesse. Lorsque nous reconnaissons que nous ne pouvons pas tout faire par nos propres forces, nous nous ouvrons à la puissance de Dieu. C'est dans notre vulnérabilité que Sa force se manifeste le plus clairement.",
+                verse: "Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse. - 2 Corinthiens 12:9"
+            },
+            {
+                title: "La Patience de Dieu",
+                text: "Dans notre monde rapide, nous voulons des réponses instantanées. Mais Dieu travaille selon Son propre calendrier. Chaque délai a un but, chaque attente façonne notre caractère. Faites confiance à Son timing parfait, même quand vous ne comprenez pas.",
+                verse: "L'Éternel est bon pour qui espère en lui, pour l'âme qui le cherche. - Lamentations 3:25"
+            },
+            {
+                title: "L'Amour Inconditionnel",
+                text: "L'amour de Dieu n'est pas basé sur nos performances ou notre perfection. Il nous aime dans nos hauts et nos bas, dans nos succès et nos échecs. Cet amour inconditionnel nous libère pour devenir qui nous sommes vraiment appelés à être.",
+                verse: "Car j'ai l'assurance que rien ne pourra nous séparer de l'amour de Dieu. - Romains 8:38"
+            }
+        ];
+
+        function newDevotional() {
+            const random = devotionals[Math.floor(Math.random() * devotionals.length)];
+            document.getElementById('devotionalTitle').textContent = random.title;
+            document.getElementById('devotionalText').textContent = random.text;
+        }
+
+        // Prayer list
+        let prayers = JSON.parse(localStorage.getItem('prayers') || '[]');
+        updatePrayerStats();
+        displayPrayers();
+
+        function addPrayer() {
+            const input = document.getElementById('prayerInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                prayers.unshift({
+                    id: Date.now(),
+                    text: text,
+                    date: new Date().toLocaleDateString('fr-FR'),
+                    answered: false
+                });
+                localStorage.setItem('prayers', JSON.stringify(prayers));
+                input.value = '';
+                displayPrayers();
+                updatePrayerStats();
+            }
+        }
+
+        function displayPrayers() {
+            const list = document.getElementById('prayerList');
+            list.innerHTML = prayers.slice(0, 5).map(prayer => `
+                <div class="journal-entry" style="border-left-color: ${prayer.answered ? 'var(--accent)' : 'var(--border)'}">
+                    <div class="journal-date">${prayer.date}</div>
+                    <div style="margin-bottom: 0.5rem;">${prayer.text}</div>
+                    <button onclick="markAnswered(${prayer.id})" class="secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                        ${prayer.answered ? '✓ Exaucée' : 'Marquer comme exaucée'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function markAnswered(id) {
+            prayers = prayers.map(p => p.id === id ? {...p, answered: !p.answered} : p);
+            localStorage.setItem('prayers', JSON.stringify(prayers));
+            displayPrayers();
+            updatePrayerStats();
+        }
+
+        function updatePrayerStats() {
+            document.getElementById('activePrayers').textContent = prayers.filter(p => !p.answered).length;
+            document.getElementById('answeredPrayers').textContent = prayers.filter(p => p.answered).length;
+        }
+
+        // Journal
+        let journal = JSON.parse(localStorage.getItem('journal') || '[]');
+        displayJournal();
+
+        function saveJournalEntry() {
+            const input = document.getElementById('journalInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                journal.unshift({
+                    date: new Date().toLocaleDateString('fr-FR'),
+                    time: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'}),
+                    text: text
+                });
+                localStorage.setItem('journal', JSON.stringify(journal));
+                input.value = '';
+                displayJournal();
+                alert('✅ Entrée sauvegardée !');
+            }
+        }
+
+        function displayJournal() {
+            const entries = document.getElementById('journalEntries');
+            entries.innerHTML = journal.slice(0, 5).map(entry => `
+                <div class="journal-entry">
+                    <div class="journal-date">${entry.date} à ${entry.time}</div>
+                    <div>${entry.text}</div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: var(--text-muted);">Aucune entrée pour le moment</p>';
+        }
+    </script>
+</body>
+</html>

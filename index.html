@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✟cord - Communauté Chrétienne</title>
+    <meta name="description" content="Communauté chrétienne Discord accueillante. Partenariats avec LAMAstream et Rayz. Ouvert à tous.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: #2d3436;
+            line-height: 1.7;
+            background: #f9f9f9;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        nav .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1.3rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #2d3436;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 3rem;
+        }
+
+        nav a {
+            color: #636e72;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #2d3436;
+        }
+
+        /* Hero Section with Background */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.35)), 
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&q=90');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-family: 'Lora', serif;
+            font-size: 5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.4rem;
+            max-width: 750px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+            line-height: 1.9;
+            opacity: 0.97;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1.1rem 3.2rem;
+            background: white;
+            color: #2d3436;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 3px;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn.outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn.outline:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 7rem 2.5rem;
+            position: relative;
+        }
+
+        .section-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: -1;
+        }
+
+        .section-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.94);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h2 {
+            font-family: 'Lora', serif;
+            font-size: 3.2rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            text-align: center;
+            color: #2d3436;
+        }
+
+        .intro {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto 4.5rem;
+            color: #636e72;
+            font-size: 1.15rem;
+            line-height: 1.85;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3.5rem;
+            max-width: 950px;
+            margin: 5rem auto;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .stat:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-family: 'Lora', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #2d3436;
+            margin-bottom: 0.6rem;
+        }
+
+        .stat-label {
+            color: #636e72;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        /* Cards Grid */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.8rem;
+            margin-top: 3.5rem;
+        }
+
+        .card {
+            background: white;
+            padding: 3.2rem 2.8rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-6px);
+        }
+
+        .card-icon {
+            font-size: 2.8rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .card h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.75rem;
+            margin-bottom: 1.1rem;
+            color: #2d3436;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: #636e72;
+            line-height: 1.85;
+            margin-bottom: 1.8rem;
+            font-size: 1.02rem;
+        }
+
+        .card-link {
+            color: #2d3436;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-bottom: 2px solid #2d3436;
+            padding-bottom: 3px;
+            transition: opacity 0.3s;
+        }
+
+        .card-link:hover {
+            opacity: 0.7;
+        }
+
+        /* Blog Cards */
+        .blog-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+            gap: 3rem;
+            margin-top: 3.5rem;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-img {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .blog-content {
+            padding: 2.5rem;
+        }
+
+        .blog-date {
+            color: #95a5a6;
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .blog-card h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #2d3436;
+        }
+
+        .blog-card p {
+            color: #636e72;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Faith Section */
+        .faith-box {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 4.5rem;
+            border-radius: 4px;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .faith-box h3 {
+            font-family: 'Lora', serif;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #2d3436;
+        }
+
+        .faith-box p {
+            color: #636e72;
+            line-height: 1.9;
+            margin-bottom: 1.8rem;
+            font-size: 1.08rem;
+        }
+
+        .values-box {
+            background: #f8f9fa;
+            padding: 3rem;
+            border-radius: 4px;
+            margin: 2.5rem 0;
+        }
+
+        .values-box h4 {
+            font-family: 'Lora', serif;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.6rem;
+            color: #2d3436;
+        }
+
+        .values-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .values-box li {
+            padding: 1rem 0;
+            color: #636e72;
+            line-height: 1.75;
+            font-size: 1.05rem;
+        }
+
+        .values-box li strong {
+            color: #2d3436;
+            font-weight: 600;
+        }
+
+        .verse {
+            text-align: center;
+            font-style: italic;
+            color: #7f8c8d;
+            margin: 2.5rem 0;
+            font-size: 1.12rem;
+            line-height: 1.7;
+        }
+
+        /* Form */
+        .form-box {
+            max-width: 750px;
+            margin: 4.5rem auto 0;
+            background: white;
+            padding: 3.5rem;
+            border-radius: 4px;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-box h3 {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            color: #2d3436;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: #2d3436;
+            font-weight: 600;
+            font-size: 0.98rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1.5px solid #dfe6e9;
+            border-radius: 3px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            transition: border 0.3s;
+            background: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2d3436;
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: #2d3436;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+
+        .submit-btn:hover {
+            background: #1a1d1f;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3436;
+            color: white;
+            padding: 3.5rem 2.5rem 2.5rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1.8rem;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+            font-size: 0.95rem;
+        }
+
+        footer a:hover {
+            opacity: 1;
+        }
+
+        .footer-links {
+            margin-bottom: 2.2rem;
+        }
+
+        .copyright {
+            opacity: 0.65;
+            font-size: 0.92rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+            .hero-content .subtitle {
+                font-size: 1.15rem;
+            }
+            nav ul {
+                display: none;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .cards, .blog-cards {
+                grid-template-columns: 1fr;
+            }
+            h2 {
+                font-size: 2.4rem;
+            }
+            section {
+                padding: 4rem 1.5rem;
+            }
+            .faith-box, .form-box {
+                padding: 2.5rem 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">✟cord</a>
+            <ul>
+                <li><a href="#home">Accueil</a></li>
+                <li><a href="bible.html">Bible</a></li>
+                <li><a href="tools.html">Outils</a></li>
+                <li><a href="#partnerships">Partenariats</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#faith">Notre Foi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero" id="home">
+        <div class="hero-content">
+            <h1>✟cord</h1>
+            <p class="subtitle">
+                Une communauté chrétienne bienveillante où chacun, croyant ou non, 
+                est accueilli avec respect et ouverture.
+            </p>
+            <div class="hero-btns">
+                <a href="https://discord.gg/kVs5NaUG" target="_blank" class="btn">Rejoindre la communauté</a>
+                <a href="bible.html" class="btn outline">Lire la Bible</a>
+                <a href="tools.html" class="btn outline">Outils Spirituels</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <section>
+        <div class="section-bg" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=2000&q=90');"></div>
+        <div class="section-overlay"></div>
+        
+        <div class="container">
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">1.8K+</div>
+                    <div class="stat-label">Membres</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Partenaires</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Actif</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUTILS -->
+    <section>
+        <div class="section-bg" style="background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=2000&q=90');"></div>
+        <div class="section-overlay"></div>
+        
+        <div class="container">
+            <h2>Outils Spirituels</h2>
+            <p class="intro">
+                Des ressources quotidiennes pour enrichir votre vie de foi et créer 
+                des habitudes spirituelles durables.
+            </p>
+            
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">📖</div>
+                    <h3>Bible Interactive</h3>
+                    <p>Lisez les Écritures dans un environnement apaisant avec de magnifiques fonds naturels et une typographie soignée.</p>
+                    <a href="bible.html" class="card-link">Ouvrir →</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">⏰</div>
+                    <h3>Minuteur de Prière</h3>
+                    <p>Créez une routine de prière régulière. Suivez vos sessions et voyez votre progression spirituelle.</p>
+                    <a href="tools.html" class="card-link">Commencer →</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <h3>Mémorisation</h3>
+                    <p>Apprenez et retenez les versets bibliques avec notre système progressif de mémorisation.</p>
+                    <a href="tools.html" class="card-link">Apprendre →</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3>Journal Spirituel</h3>
+                    <p>Documentez votre parcours de foi et vos réflexions quotidiennes dans un espace privé.</p>
+                    <a href="tools.html" class="card-link">Écrire →</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🙏</div>
+                    <h3>Liste de Prière</h3>
+                    <p>Organisez vos intentions et célébrez les prières exaucées. Gardez un historique complet.</p>
+                    <a href="tools.html" class="card-link">Gérer →</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <h3>Méditations</h3>
+                    <p>Réflexions spirituelles quotidiennes pour nourrir votre relation avec Dieu.</p>
+                    <a href="tools.html" class="card-link">Méditer →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTENARIATS -->
+    <section id="partnerships">
+        <div class="section-bg" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=2000&q=90');"></div>
+        <div class="section-overlay"></div>
+        
+        <div class="container">
+            <h2>Partenariats</h2>
+            <p class="intro">
+                Nous collaborons avec des organisations vérifiées pour offrir 
+                la meilleure expérience à notre communauté.
+            </p>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">✟</div>
+                    <h3>LAMAstream</h3>
+                    <p>Partenariat officiel pour fonctionnalités AI avancées et streaming professionnel.</p>
+                    <a href="https://rayzindra.github.io/LAMAstream/" target="_blank" class="card-link">Découvrir →</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>Vérification Rayz</h3>
+                    <p>Système de vérification garantissant l'authenticité de nos collaborations.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <h3>Devenez Partenaire</h3>
+                    <p>Rejoignez notre réseau de serveurs chrétiens bienveillants.</p>
+                    <a href="#form" class="card-link">Postuler →</a>
+                </div>
+            </div>
+
+            <div class="form-box" id="form">
+                <h3>Demande de Partenariat</h3>
+                <form id="partnershipForm">
+                    <div class="form-group">
+                        <label for="serverName">Nom du serveur</label>
+                        <input type="text" id="serverName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="serverMembers">Nombre de membres</label>
+                        <select id="serverMembers" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="50-200">50 - 200</option>
+                            <option value="200-500">200 - 500</option>
+                            <option value="500-1000">500 - 1000</option>
+                            <option value="1000+">1000+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="serverInvite">Lien d'invitation Discord</label>
+                        <input type="url" id="serverInvite" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" required placeholder="Parlez-nous de votre communauté..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Contact</label>
+                        <input type="text" id="contact" required placeholder="Discord ou Email">
+                    </div>
+                    <button type="submit" class="submit-btn">Envoyer la demande</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOG -->
+    <section id="blog">
+        <div class="section-bg" style="background-image: url('https://images.unsplash.com/photo-1501612780327-45045538702b?w=2000&q=90');"></div>
+        <div class="section-overlay"></div>
+        
+        <div class="container">
+            <h2>Articles Récents</h2>
+            <p class="intro">
+                Découvrez nos dernières réflexions, actualités et partages spirituels.
+            </p>
+
+            <div class="blog-cards">
+                <div class="blog-card">
+                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800&q=85');"></div>
+                    <div class="blog-content">
+                        <div class="blog-date">5 Février 2026 • Actualités</div>
+                        <h3>Partenariat avec LAMAstream</h3>
+                        <p>Découvrez notre nouveau partenariat officiel avec LAMAstream et comment il enrichit notre expérience communautaire.</p>
+                        <a href="#" class="card-link">Lire l'article →</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800&q=85');"></div>
+                    <div class="blog-content">
+                        <div class="blog-date">1 Février 2026 • Communauté</div>
+                        <h3>L'ouverture : notre force</h3>
+                        <p>Chrétiens, athées, autres religions : tous sont les bienvenus. Découvrez pourquoi la diversité enrichit notre communauté.</p>
+                        <a href="#" class="card-link">Lire l'article →</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=800&q=85');"></div>
+                    <div class="blog-content">
+                        <div class="blog-date">28 Janvier 2026 • Étude Biblique</div>
+                        <h3>Nouvelle série d'études</h3>
+                        <p>Rejoignez notre série hebdomadaire d'études bibliques en live stream. Échanges et approfondissement dans un cadre bienveillant.</p>
+                        <a href="#" class="card-link">Lire l'article →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOI -->
+    <section id="faith">
+        <div class="section-bg" style="background-image: url('https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=2000&q=90');"></div>
+        <div class="section-overlay"></div>
+        
+        <div class="container">
+            <h2>Notre Foi & Valeurs</h2>
+            
+            <div class="faith-box">
+                <h3>Une Communauté Ouverte</h3>
+                
+                <p>
+                    ✟cord est une communauté chrétienne où nous partageons notre foi, étudions la Bible et grandissons spirituellement ensemble. Nous croyons en l'amour du Christ et cherchons à vivre selon ses enseignements.
+                </p>
+
+                <p>
+                    <strong>Cependant, nous sommes ouverts à tous.</strong> Que vous soyez athée, agnostique, musulman, juif, bouddhiste ou d'une autre conviction, vous êtes le bienvenu. Nous valorisons le respect mutuel, le dialogue constructif et l'enrichissement par la diversité.
+                </p>
+
+                <p>
+                    Notre communauté est un espace sûr où chacun peut poser des questions, partager ses doutes, discuter de spiritualité ou simplement apprécier la compagnie de personnes bienveillantes.
+                </p>
+
+                <div class="values-box">
+                    <h4>Nos Valeurs</h4>
+                    <ul>
+                        <li><strong>Amour & Compassion</strong> — Traiter chacun avec gentillesse</li>
+                        <li><strong>Respect</strong> — Honorer toutes les croyances</li>
+                        <li><strong>Authenticité</strong> — Être vrai dans nos échanges</li>
+                        <li><strong>Inclusion</strong> — Accueillir la diversité</li>
+                        <li><strong>Croissance</strong> — Grandir ensemble</li>
+                    </ul>
+                </div>
+
+                <p class="verse">
+                    « Aimez-vous les uns les autres comme je vous ai aimés. »<br>
+                    Jean 13:34
+                </p>
+
+                <div style="text-align: center; margin-top: 2.5rem;">
+                    <a href="https://discord.gg/kVs5NaUG" target="_blank" class="btn">Rejoindre ✟cord</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">Conditions</a>
+            <a href="#">Confidentialité</a>
+            <a href="#">Contact</a>
+            <a href="https://github.com" target="_blank">GitHub</a>
+            <a href="https://rayzindra.github.io/LAMAstream/" target="_blank">LAMAstream</a>
+        </div>
+        <div class="copyright">
+            © 2026 ✟cord — Propulsé par Rayz & LAMAstream
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('partnershipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('✓ Demande envoyée ! Nous vous contacterons bientôt.');
+            this.reset();
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
